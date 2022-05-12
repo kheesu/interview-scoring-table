@@ -51,16 +51,7 @@ int main() {
         }
 
         else if (buffer[0] == '2') {
-            row* p = headrow->next;
-            for (int i = 0; i < q + 3; i++) printf("%s\t", headrow->data[i]);
-            puts("");
-            while (p != NULL) {
-                for (int i = 0; i < q + 3; i++) {
-                    printf("%d\t\t", p->data[i]);
-                }
-                printf("\n");
-                p = p->next;
-            }
+            iterator(headrow, q);
         }
 
         else if (buffer[0] == '3') {
@@ -95,9 +86,11 @@ int main() {
         else if (buffer[0] == '7') {
             printf("Enter input file name\n");
             scanf("%s", buffer);
-            headrow = csv_in(buffer);
-            if (headrow != NULL) q = headrow->config[0] - 3;
-            else headrow = table_init(q);
+            head *temp = csv_in(buffer);
+            if (temp != NULL) {
+                headrow = temp;
+                q = headrow->config[0] - 3;
+            }
         }
 
         else if (buffer[0] == '!') return 0;
