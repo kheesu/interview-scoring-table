@@ -3,21 +3,6 @@
 #include <string.h>
 #include "header.h"
 
-head* table_init(int len);
-
-void row_append(int q, head* pointer);
-
-void print_row(row* r, int q);
-
-void row_del(head* table, int q, int column, int query);
-
-
-void csv_out(head* table, int q, char* name);
-
-head* csv_in(const char* name);
-
-
-
 int main() {
     int q;                                                          //Sets the number of questions for the table
     printf("Enter Number of Questions : ");
