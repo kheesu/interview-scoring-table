@@ -24,6 +24,9 @@
     <ClCompile Include="csv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="aux.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.h">
