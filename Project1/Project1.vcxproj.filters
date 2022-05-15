@@ -24,7 +24,7 @@
     <ClCompile Include="csv.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="aux.c">
+    <ClCompile Include="auxi.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
