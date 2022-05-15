@@ -18,6 +18,8 @@ typedef struct head {
 
 head* table_init(int len);
 
+row* table_search(head* table, int column, int query);
+
 void row_append(int q, head* pointer);
 
 void print_row(row* r, int q);
@@ -30,9 +32,18 @@ void csv_out(head* table, int q, char* name);
 head* csv_in(const char* name);
 
 
+
+void row_update(head* table, int q, int column, int query);
+
 void get_average(head* table, int q);
 
-row* return_max_average_row(const head* table, int q, int floor_score, int* pass_people_array, int pass_people_array_cnt);
+void sort_array(int* array, int num);
+
+int* make_average_array(head* talbe, int q, int people);
+
+int paint_pass(head* table, int q, int average, int floor_Score);
+
+void paint_fail(head* table, int q);
 
 int check_floor_score(row* using_row, int q, int floor_score);
 

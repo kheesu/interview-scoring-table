@@ -16,30 +16,6 @@ void get_average(head* table, int q) {
     };
 };
 
-row* return_max_average_row(const head* table, int q, int floor_score, int* pass_people_array, int pass_people_array_cnt) {
-    row* using_row = table->next;
-    row* best_row = table->next;
-    int best_row_data = using_row->data[q + 1];
-    while (using_row != NULL) {
-        if (!check_floor_score(using_row, q, floor_score)) {
-            using_row = using_row->next;
-            continue; //과락일 경우
-        };
-        for (int i = 0; i < pass_people_array_cnt; i++) {
-            if (using_row->data[0] == pass_people_array[i]) {
-                using_row = using_row->next;
-                continue;
-            }; //이미 담아진 합격자일 경우
-        };
-        if (using_row->data[q + 1] > best_row_data) {
-            best_row_data = using_row->data[q + 1];
-            best_row = using_row;
-        };
-        using_row = using_row->next;
-    };
-    return best_row;
-};
-
 int check_floor_score(row* using_row, int q, int floor_score) {
     for (int i = 1; i <= q; i++) {
         if (using_row->data[i] < floor_score) {
@@ -49,27 +25,74 @@ int check_floor_score(row* using_row, int q, int floor_score) {
     return 1;
 }; // boolean을 return
 
+void sort_array(int* array, int num) { //bubble sort 내림차순
+    int temp;
+    for (int i = 0; i < num; i++)
+    {
+        for (int j = 0; j < num - 1; j++)
+        {
+            if (array[j] < array[j + 1])
+            {
+                temp = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = temp;
+            }
+        }
+    }
+};
+
+int* make_average_array(head* table, int q, int people) {
+    row* using_row = table->next;
+    int* average_array = malloc(sizeof(int) * people);
+    int cnt = 0;
+    while (using_row != NULL) {
+        average_array[cnt] = using_row->data[q + 1];
+        using_row = using_row->next;
+        cnt++;
+    };
+    sort_array(average_array, people);
+    return average_array;
+};
+
+int paint_pass(head* table, int q, int average, int floor_score) {             //해당 점수로 구현된 합격자수를 반환
+    row* p = table->next;
+    int cnt = 0;
+    while (p != NULL) {
+        if (p->data[q + 1] == average && check_floor_score(p, q, floor_score) ){
+            p->data[q + 2] = 1;
+            cnt++;
+        };
+        p = p->next;
+    };
+    return cnt;
+};
+
+void paint_fail(head* table, int q) {
+    row* p = table->next;
+    while (p != NULL) {
+        if (p->data[q + 2] != 1) {
+            p->data[q + 2] = 0;
+        }
+        p = p->next;
+    };
+}
 
 void score_people(head* table, int q, int floor_score, int pass_people_num) {
     get_average(table, q); //먼저 평균을 구한다.
-    int people = how_many_people(table); //지원자들의 수.
-    int* pass_people_array = malloc(sizeof(int) * pass_people_num);
-    int pass_people_array_cnt = 0;
-    for (int i = 0; i < pass_people_num; i++) { //합격자들의 학번 리스트를 만듬
-        row* temp = return_max_average_row(table, q, floor_score, pass_people_array, pass_people_array_cnt);
-        pass_people_array[pass_people_array_cnt] = temp->data[0];
-        pass_people_array_cnt++;
-    };
-    for (int i = 0; i < people; i++) { //합격 불합격 나열
-        row* using_row = table->next;
-        if (is_in_array(pass_people_array, pass_people_array_cnt, using_row->data[0])) {
-            using_row->data[q + 2] = 1; //합격
-        }
-        else {
-            using_row->data[q + 2] = 0; //불합격
+    int people = how_many_people(table);
+    int* average_array = make_average_array(table, q, people);
+    int temp = average_array[0];
+    int cnt = 0;
+    int i = 0;
+    while (cnt < pass_people_num && i<people) {
+        if (temp != average_array[i] || i == 0) {
+            int pass_num = paint_pass(table, q, average_array[i], floor_score);
+            cnt += pass_num;
+            i++;
         };
     };
-    free(pass_people_array);
+    
+    paint_fail(table, q);
 };
 
 

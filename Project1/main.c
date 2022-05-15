@@ -67,6 +67,18 @@ int main() {
             }
         }
 
+        else if (buffer[0] == '8'){
+            get_average(headrow, q);
+        }
+
+        else if (buffer[0] == '9'){
+            int floor_score;
+            scanf("%d", &floor_score);
+            int pass_people_num;
+            scanf("%d", &pass_people_num);
+            score_people(headrow, q, floor_score, pass_people_num);
+        }
+
         else if (buffer[0] == '!') return 0;
         else printf("Enter valid character\n");
     }
