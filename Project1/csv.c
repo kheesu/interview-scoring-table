@@ -29,7 +29,7 @@ void csv_out(head* table, int q, char* name) {
 head* csv_in(const char* name) {
     FILE* fp = fopen(name, "r");
     if (fp == NULL) {
-        fprintf(stderr, "File not found, aborting...\n");
+        fprintf(stderr, "File not found, retry\n");
         return NULL;
     }
 

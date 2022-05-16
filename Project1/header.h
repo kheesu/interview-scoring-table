@@ -1,6 +1,7 @@
 #pragma once
 
 #define MAX_LENGTH 50
+#define BUFF_SIZE 4096
 #define ROWALLOC(X) row *X = malloc(sizeof(row))
 
 typedef struct row row;

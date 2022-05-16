@@ -4,7 +4,7 @@
 #include "header.h"
 
 
-
+/*
 int main() {
     int q;                                                          //Sets the number of questions for the table
     printf("Enter Number of Questions : ");
@@ -83,4 +83,67 @@ int main() {
         else printf("Enter valid character\n");
     }
     return 0;
+}
+*/
+
+int main() {
+    char buffer[BUFF_SIZE];
+    head* table;
+    int q;
+
+    while (1) {
+        printf("Enter\n1 to create new table\n2 to load table from CSV file\n0 to exit program\n");
+        if (scanf("%4095s", buffer) != 1) {                                         //needs work to handle inputs larger than 4 kib
+            fprintf(stderr, "INPUT ERROR\n");
+            return -1;
+        }
+        if (buffer[1] != '\0' || buffer[0] < '0' || buffer[0] > '2') {
+            printf("Invalid input, please try again\n");
+        }
+        else if (buffer[0] == '1') {
+            q = 1025;                                                          //Sets the number of questions for the table
+            while (1) {
+                printf("Enter Number of Questions (Max 1024) : ");
+                if (scanf("%4095s", buffer) != 1) {
+                    fprintf(stderr, "INPUT ERROR\n");
+                    return -1;
+                }
+                errno = 0;
+                q = (int)strtol(buffer, NULL, 0);
+
+                if (errno == ERANGE) fprintf(stderr, "Range error, try again\n");
+
+                if (q > 1024 || q < 1) printf("Enter Valid Number\n");
+
+                else {
+                    table = table_init(q);
+                    break;
+                }
+            }
+            break;
+        }
+        else if (buffer[0] == '2') {
+            while (1) {
+                printf("File to load:\n");
+                if (scanf("%4095s", buffer) != 1) {
+                    fprintf(stderr, "INPUT ERROR\n");
+                    return -1;
+                }
+                table = csv_in(buffer);
+
+                if (table != NULL) {
+                    q = table->config[0] - 3;
+                    break;
+                }
+            }
+            break;
+        }
+        else if (buffer[0] == '0') {
+            printf("Exiting...\n");
+            return 0;
+        }
+    }
+    
+
+
 }
