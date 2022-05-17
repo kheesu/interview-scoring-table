@@ -29,6 +29,7 @@ head* table_init(int len) {
 
 
 void row_append(int q, head* pointer) {                             //Creates new row and appends to the end of the table
+    char c;
     ROWALLOC(new);                                                  //Allocates new row and appends it to the table
                                                                 //TODO: malloc execption handling
     if (pointer->next == NULL) {
@@ -47,8 +48,10 @@ void row_append(int q, head* pointer) {                             //Creates ne
         ;
         if (scanf("%11d", data + i) != 1) {
             fprintf(stderr, "INPUT ERROR\n");
-            return -1;
+            exit(-1);
         }
+
+        while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
     }
     pointer->tail->data = data;
     pointer->tail->next = NULL;
@@ -56,12 +59,9 @@ void row_append(int q, head* pointer) {                             //Creates ne
 }
 
 
-//TODO: Make the test printing thing into a function
-//void print_table()
-
 void print_row(row* r, int q) {                                     //Prints the pointed row
     if (r == NULL) return;
-    for (int i = 0; i < q + 3; i++) printf("%d\t", r->data[i]);
+    for (int i = 0; i < q + 3; i++) printf("%-20d", r->data[i]);
     puts("");
     return;
 }
@@ -76,8 +76,23 @@ row* table_search(head* table, int column, int query) {             //Returns po
     return NULL;                                                    //Also returns NULL if search failed
 }
 
+int m_table_search(head* table, int column, int query, int q) {
+    if (table->next == NULL) return 0;                            //Returns 0 if table is empty i.e. only has head row
+    row* p = table->next;
+
+    while (p != NULL) {
+        if (p->data[column] == query) {
+            print_row(p, q);
+            p = p->next;
+        }
+    }
+    return 1;
+}
+
 void row_update(head* table, int q, int column, int query) {
     row* p = table_search(table, column, query);
+    char c;
+
     if (p == NULL) {
         fprintf(stderr, "Search failed, abort update\n");
         return;
@@ -87,7 +102,13 @@ void row_update(head* table, int q, int column, int query) {
     int* data = malloc(sizeof(int) * (q + 3));                      //Allocate an int array to be inserted into the old row
     for (int i = 0; i < q + 3; i++) {
         printf("Enter data for %s : \n", table->data[i]);
-        scanf("%d", data + i);
+
+        if (scanf("%11d", data + i) != 1) {
+            fprintf(stderr, "INPUT ERROR\n");
+            exit(-1);
+        }
+
+        while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
     }
     p->data = data;
     return;
@@ -130,3 +151,43 @@ void row_del(head* table, int q, int column, int query) {               //Delete
 }
 
 //TODO: Make delete function for deleting multiple matching rows
+int m_row_del(head* table, int column, int query) {
+    int result = 0;
+    if (table->next == NULL) {                                            //Returns if table is empty i.e. only has head row
+        printf("Empty table, abort delete\n");
+        return 0;
+    }
+    if (table->next->data[column] == query && table->next->next == NULL) {
+        free(table->next->data);
+        free(table->next);
+        table->next = NULL;
+        return 1;
+    }
+    while (table->next->data[column] == query) {
+        row* temp = table->next;
+        table->next = table->next->next;
+        free(temp->data);
+        free(temp);
+        result = 1;
+        
+        if (table->next == NULL) return result;
+    }
+
+    row* p = table->next;
+
+    while (p->next != NULL) {
+        if (p->next->data[column] == query) {
+            row* temp = p->next;
+            if (p->next->next == NULL) table->tail = p;
+            p->next = p->next->next;       //If the matching row is the final row, need to update the tail pointer of head
+            free(temp->data);
+            free(temp);
+            result = 1;
+        }
+
+        else p = p->next;
+
+        if (p == NULL) return result;
+    }
+    return result;
+}

@@ -14,7 +14,7 @@ typedef struct head {
     row* next;
     row* tail;
     char(*data)[MAX_LENGTH];
-    int config[2];                          //config[0] == number of columns, config[1] == minimum score
+    int config[2];                          //config[0] == number of columns, config[1] == table size
 } head;
 
 head* table_init(int len);

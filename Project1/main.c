@@ -72,7 +72,7 @@ int main() {
     }
     
     while (1) {
-        printf("Enter\n 1 to print table\n 2 to add entry,\n 3 to search for a value\n 4 to update the row of searched value\n 5 to delete the row of searched value\n 6 to save current table as csv\n 0 to exit\n");
+        printf("Enter\n 1 to print table\n 2 to add entry\n 3 to search\n 4 to update\n 5 to delete\n 6 to save current table as csv\n 0 to exit\n");
         if (scanf("%4095s", buffer) != 1) {
             fprintf(stderr, "INPUT ERROR\n");
             return -1;
@@ -101,12 +101,16 @@ int main() {
             }
 
             while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
-
+/*
             row* p = table_search(table, column, query);
 
             if (p == NULL) printf("ERROR\nSearch failed or empty table\n");
 
             else print_row(p, q);
+*/
+            if (m_table_search(table, column, query, q) == 0) {
+                printf("ERROR\nSearch failed or empty table\n");
+            }
         }
 
         else if (buffer[0] == '4') {
@@ -134,7 +138,8 @@ int main() {
 
             while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
 
-            row_del(table, q, column, query);
+            //row_del(table, column, query);
+            m_row_del(table, column, query);
         }
 
         else if (buffer[0] == '6') {
