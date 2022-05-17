@@ -23,9 +23,9 @@ int check_floor_score(row* using_row, int q, int floor_score) {
         };
     };
     return 1;
-}; // boolean을 return
+};
 
-void sort_array(int* array, int num) { //bubble sort 내림차순
+void sort_array(int* array, int num) { //bubble sort 
     int temp;
     for (int i = 0; i < num; i++)
     {
@@ -54,7 +54,7 @@ int* make_average_array(head* table, int q, int people) {
     return average_array;
 };
 
-int paint_pass(head* table, int q, int average, int floor_score) {             //해당 점수로 구현된 합격자수를 반환
+int paint_pass(head* table, int q, int average, int floor_score) {             
     row* p = table->next;
     int cnt = 0;
     while (p != NULL) {
@@ -78,7 +78,7 @@ void paint_fail(head* table, int q) {
 }
 
 void score_people(head* table, int q, int floor_score, int pass_people_num) {
-    get_average(table, q); //먼저 평균을 구한다.
+    get_average(table, q);
     int people = how_many_people(table);
     int* average_array = make_average_array(table, q, people);
     int temp = average_array[0];
@@ -103,7 +103,7 @@ int is_in_array(int* Array, int Array_length, int source) {
         };
     };
     return 0;
-}; //return boolean
+}; 
 
 int how_many_people(head* table) {
     row* row = table->next;
