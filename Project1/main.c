@@ -90,16 +90,20 @@ int main() {
     char buffer[BUFF_SIZE];
     head* table;
     int q;
+    char c;
 
     while (1) {
         printf("Enter\n1 to create new table\n2 to load table from CSV file\n0 to exit program\n");
-        if (scanf("%4095s", buffer) != 1) {                                         //needs work to handle inputs larger than 4 kib
+        if (scanf("%10s", buffer) != 1) {                                        
             fprintf(stderr, "INPUT ERROR\n");
             return -1;
         }
-        if (buffer[1] != '\0' || buffer[0] < '0' || buffer[0] > '2') {
-            printf("Invalid input, please try again\n");
-        }
+
+        while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+
+        if (buffer[1] != '\0' || buffer[0] < '0' || buffer[0] > '2')
+            printf("Invalid input, try again\n");
+
         else if (buffer[0] == '1') {
             q = 1025;                                                          //Sets the number of questions for the table
             while (1) {
@@ -108,6 +112,9 @@ int main() {
                     fprintf(stderr, "INPUT ERROR\n");
                     return -1;
                 }
+
+                while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+                
                 errno = 0;
                 q = (int)strtol(buffer, NULL, 0);
 
@@ -129,6 +136,9 @@ int main() {
                     fprintf(stderr, "INPUT ERROR\n");
                     return -1;
                 }
+
+                while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+
                 table = csv_in(buffer);
 
                 if (table != NULL) {
@@ -144,6 +154,22 @@ int main() {
         }
     }
     
+    while (1) {
+        printf("Enter\n1 to print table\n 2 to add entry,\n 3 to search for a value\n 4 to update the row of searched value\n 5 to delete the row of searched value\n 6 to save current table as csv\n");
+        if (scanf("%4095s", buffer) != 1) {
+            fprintf(stderr, "INPUT ERROR\n");
+            return -1;
+        }
+
+        while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+
+        if (buffer[0] < '1' || buffer[0] > '6' || buffer[1] != '\0')
+            printf("Invalid input, try again\n");
+
+        else if (buffer[0] == '1') {
+
+        }
+    }
 
 
 }
