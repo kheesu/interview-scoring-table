@@ -98,7 +98,7 @@ void row_update(head* table, int q, int column, int query) {
         return;
     }
 
-    free(p->data);                                                  //Free previous row
+    free(p->data);                                                  //Free previous row's data
     int* data = malloc(sizeof(int) * (q + 3));                      //Allocate an int array to be inserted into the old row
     for (int i = 0; i < q + 3; i++) {
         printf("Enter data for %s : \n", table->data[i]);
@@ -112,6 +112,37 @@ void row_update(head* table, int q, int column, int query) {
     }
     p->data = data;
     return;
+}
+
+void replace_row(head *table, row *p, int q) {
+    char c;
+    free(p->data);                                                  //Free previous row's data
+    int* data = calloc(q + 3, sizeof(int));                      //Allocate an int array to be inserted into the old row
+    for (int i = 0; i < q + 1; i++) {
+        printf("Enter data for %s : \n", table->data[i]);
+
+        if (scanf("%11d", data + i) != 1) {
+            fprintf(stderr, "INPUT ERROR\n");
+            exit(-1);
+        }
+
+        while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+    }
+    p->data = data;
+    return;
+}
+
+int m_row_update(head* table, int q, int column, int query) {
+    if (table->next == NULL) return 0;                            //Returns 0 if table is empty i.e. only has head row
+    row* p = table->next;
+
+    while (p != NULL) {
+        if (p->data[column] == query) {
+            replace_row(table, p, q);
+        }
+        p = p->next;
+    }
+    return 1;
 }
 
 //TODO: Make update function for updating single values

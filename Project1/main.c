@@ -124,7 +124,7 @@ int main() {
 
             while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
 
-            row_update(table, q, column, query);
+            m_row_update(table, q, column, query);
         }
 
         else if (buffer[0] == '5') {
