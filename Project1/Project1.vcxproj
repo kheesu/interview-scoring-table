@@ -140,7 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="auxi.c" />
+    <ClCompile Include="aux.c" />
     <ClCompile Include="crud.c" />
     <ClCompile Include="csv.c" />
     <ClCompile Include="main.c" />

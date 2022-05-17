@@ -29,7 +29,7 @@ void csv_out(head* table, int q, char* name) {
 head* csv_in(const char* name) {
     FILE* fp = fopen(name, "r");
     if (fp == NULL) {
-        fprintf(stderr, "Error : File not found, retry\n");
+        fprintf(stderr, "File not found, aborting...\n");
         return NULL;
     }
 
@@ -41,22 +41,6 @@ head* csv_in(const char* name) {
     for (int i = 0; buffer[i] != '\n'; i++) {
         if (buffer[i] == ',') col++;
     }
-
-    if (col == 0) {
-        printf("Error : Invalid file, try again\n");
-        return NULL;
-    }
-
-    int temp = 0;
-    while (fgets(buffer, 4096, fp) != NULL) {
-        for (int i = 0; buffer[i] != '\n'; i++) if (buffer[i] == ',') temp++;
-        if (temp != col) {
-            printf("Error : Invalid file, try again\n");
-            return NULL;
-        }
-        temp = 0;
-    }
-
     table->config[0] = ++col;
     fseek(fp, 0, SEEK_SET);
 
