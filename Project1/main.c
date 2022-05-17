@@ -120,7 +120,7 @@ int main() {
 
                 if (errno == ERANGE) fprintf(stderr, "Range error, try again\n");
 
-                if (q > 1024 || q < 1) printf("Enter Valid Number\n");
+                if (q > 1024 || q < 1) printf("Invalid input, try again\n");
 
                 else {
                     table = table_init(q);
@@ -163,7 +163,7 @@ int main() {
 
         while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
 
-        if (buffer[0] < '1' || buffer[0] > '6' || buffer[1] != '\0')
+        if (buffer[0] < '0' || buffer[0] > '6' || buffer[1] != '\0')
             printf("Invalid input, try again\n");
 
         else if (buffer[0] == '1') {
@@ -173,11 +173,11 @@ int main() {
         else if (buffer[0] == '2') {
             row_append(q, table);
         }
-        
+
         else if (buffer[0] == '3') {
             int column, query;
             printf("Enter column to search, then data to search for :\n");
-            
+
             if (scanf("%4d%10d", &column, &query) != 2) {
                 fprintf(stderr, "INPUT ERROR\n");
                 return -1;
@@ -232,6 +232,13 @@ int main() {
 
             csv_out(table, q, buffer);
         }
+
+        else if (buffer[0] == '0') {
+            printf("Exiting...\n");
+            return 0;
+        }
+
+        else printf("Invalid input, try again\n");
     }
 
 
