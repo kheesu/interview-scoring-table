@@ -155,7 +155,7 @@ int main() {
     }
     
     while (1) {
-        printf("Enter\n1 to print table\n 2 to add entry,\n 3 to search for a value\n 4 to update the row of searched value\n 5 to delete the row of searched value\n 6 to save current table as csv\n");
+        printf("Enter\n1 to print table\n 2 to add entry,\n 3 to search for a value\n 4 to update the row of searched value\n 5 to delete the row of searched value\n 6 to save current table as csv\n0 to exit\n");
         if (scanf("%4095s", buffer) != 1) {
             fprintf(stderr, "INPUT ERROR\n");
             return -1;
@@ -167,7 +167,70 @@ int main() {
             printf("Invalid input, try again\n");
 
         else if (buffer[0] == '1') {
+            iterator(table, q);
+        }
 
+        else if (buffer[0] == '2') {
+            row_append(q, table);
+        }
+        
+        else if (buffer[0] == '3') {
+            int column, query;
+            printf("Enter column to search, then data to search for :\n");
+            
+            if (scanf("%4d%10d", &column, &query) != 2) {
+                fprintf(stderr, "INPUT ERROR\n");
+                return -1;
+            }
+
+            while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+
+            row* p = table_search(table, column, query);
+
+            if (p == NULL) printf("ERROR\nSearch failed or empty table\n");
+
+            else print_row(p, q);
+        }
+
+        else if (buffer[0] == '4') {
+            int column, query;
+            printf("Enter column to search, then data to search for :\n");
+
+            if (scanf("%4d%10d", &column, &query) != 2) {
+                fprintf(stderr, "INPUT ERROR\n");
+                return -1;
+            }
+
+            while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+
+            row_update(table, q, column, query);
+        }
+
+        else if (buffer[0] == '5') {
+            int column, query;
+            printf("Enter column to search, then data to search for :\n");
+
+            if (scanf("%4d%10d", &column, &query) != 2) {
+                fprintf(stderr, "INPUT ERROR\n");
+                return -1;
+            }
+
+            while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+
+            row_del(table, q, column, query);
+        }
+
+        else if (buffer[0] == '6') {
+            printf("Enter output file name\n");
+
+            if (scanf("%4095s", buffer) != 1) {
+                fprintf(stderr, "INPUT ERROR\n");
+                return -1;
+            }
+
+            while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+
+            csv_out(table, q, buffer);
         }
     }
 

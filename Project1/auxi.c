@@ -117,11 +117,11 @@ int how_many_people(head* table) {
 
 void iterator(head* headrow, int q) {
     row* p = headrow->next;
-    for (int i = 0; i < q + 3; i++) printf("%s\t", headrow->data[i]);
+    for (int i = 0; i < q + 3; i++) printf("%-20s", headrow->data[i]);
     puts("");
     while (p != NULL) {
         for (int i = 0; i < q + 3; i++) {
-            printf("%d\t\t", p->data[i]);
+            printf("%-20d", p->data[i]);
         }
         printf("\n");
         p = p->next;

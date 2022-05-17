@@ -44,7 +44,11 @@ void row_append(int q, head* pointer) {                             //Creates ne
 
     for (int i = 0; i < q + 1; i++) {
         printf("Enter data for %s : \n", pointer->data[i]);
-        scanf("%d", data + i);
+        ;
+        if (scanf("%d", data + i) != 1) {
+            fprintf(stderr, "INPUT ERROR\n");
+            return -1;
+        }
     }
     pointer->tail->data = data;
     pointer->tail->next = NULL;
