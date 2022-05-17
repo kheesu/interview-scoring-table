@@ -216,7 +216,7 @@ int is_valid_row(row* row, int q) {
 
 int is_valid_table(head* headrow, int q) {
     int people = how_many_people(headrow);
-    int* used_pk = malloc(sizeof(int) * people);
+    int* used_pk = malloc(sizeof(int) * people);                //Memory leak? Where does used_pk go?
     row* using_row = headrow->next;
     int cnt = 0;
     while (using_row != NULL) {
@@ -226,7 +226,7 @@ int is_valid_table(head* headrow, int q) {
             return 0;
         }; 
         if (is_in_array(used_pk, cnt, using_row->data[0])) {
-            printf("Found duplicate Student ID\n", using_row->data[0]);
+            printf("Found duplicate Student ID (%d)\n", using_row->data[0]);
             return 0;
         }; 
         used_pk[cnt] = using_row->data[0];
