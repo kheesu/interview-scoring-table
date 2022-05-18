@@ -186,7 +186,7 @@ void replace_row(head *table, row *p, int q) {
             if (failed == 1) continue;
 
             errno = 0;
-            data[i] = (int)strtol(buffer, NULL, 0);
+            int temp = (int)strtol(buffer, NULL, 0);
 
             if (errno == ERANGE) fprintf(stderr, "Range error, try again\n");
 
@@ -200,7 +200,7 @@ void replace_row(head *table, row *p, int q) {
                 failed = 0;
 
                 while (p != NULL) {
-                    if (p->data[0] == data[0]) {
+                    if (p->data[0] == temp) {
                         printf("Found duplicate Student ID (%d), try again\n", p->data[0]);
                         failed = 1;
                         break;
@@ -208,7 +208,10 @@ void replace_row(head *table, row *p, int q) {
                     p = p->next;
                 }
 
-                if (failed == 0) break;
+                if (failed == 0) {
+                    data[i] = temp;
+                    break;
+                }
             }
 
             else break;
