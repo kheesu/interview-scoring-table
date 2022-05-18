@@ -87,6 +87,7 @@ head* csv_in(const char* name) {
 
         row* new_row = calloc(1, sizeof *new_row);
         new_row->data = calloc(col, sizeof(int));
+        new_row->next = NULL;
 
         tok = strtok(buffer, ",");
         for (int i = 0; i < col; i++, tok = strtok(NULL, ",")) {

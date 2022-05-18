@@ -31,17 +31,6 @@ head* table_init(int len) {
 void row_append(int q, head* pointer) {                             //Creates new row and appends to the end of the table
     char c;
     char buffer[BUFF_SIZE];
-    ROWALLOC(new);                                                  //Allocates new row and appends it to the table
-                                                                //TODO: malloc execption handling
-    if (pointer->next == NULL) {
-        pointer->next = new;
-        pointer->tail = new;
-    }
-    else {
-        pointer->tail->next = new;
-        pointer->tail = new;
-    }
-
     int* data = calloc(q + 3, sizeof(int));                      //Allocate an int array to be inserted into the allocated row
 
     for (int i = 0; i < q + 1; i++) {
@@ -75,10 +64,39 @@ void row_append(int q, head* pointer) {                             //Creates ne
                 printf("WRONG_INPUT_EXCEPTION: Enter a valid number\n");
                 data[i] = 0;
             }
+
+            else if (i == 0) {
+                row* p = pointer->next;
+                failed = 0;
+
+                while (p != NULL) {
+                    if (p->data[0] == data[0]) {
+                        printf("Found duplicate Student ID (%d), try again\n", p->data[0]);
+                        failed = 1;
+                        break;
+                    }
+                    p = p->next;
+                }
+
+                if (failed == 0) break;
+            }
+
             else break;
         }
-        
     }
+
+    ROWALLOC(new);                                                  //Allocates new row and appends it to the table
+
+    if (pointer->next == NULL) {
+        pointer->next = new;
+        pointer->tail = new;
+    }
+    else {
+        pointer->tail->next = new;
+        pointer->tail = new;
+    }
+
+    
     pointer->tail->data = data;
     pointer->tail->next = NULL;
     return;
@@ -141,18 +159,59 @@ void row_update(head* table, int q, int column, int query) {
 }
 
 void replace_row(head *table, row *p, int q) {
-    char c;
+    char c, buffer[BUFF_SIZE];
+
     free(p->data);                                                  //Free previous row's data
     int* data = calloc(q + 3, sizeof(int));                      //Allocate an int array to be inserted into the old row
     for (int i = 0; i < q + 1; i++) {
-        printf("Enter data for %s : \n", table->data[i]);
+        while (1) {
+            int failed = 0;
+            printf("Enter data for %s : \n", table->data[i]);
 
-        if (scanf("%11d", data + i) != 1) {
-            fprintf(stderr, "INPUT ERROR\n");
-            exit(-1);
+            if (scanf("%11s", buffer) != 1) {
+                fprintf(stderr, "INPUT ERROR\n");
+                exit(-1);
+            }
+
+            while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+
+            for (int j = 0; buffer[j] != '\0'; j++) {
+                if (buffer[j] < '0' || buffer[j] > '9') {
+                    printf("WRONG_INPUT_EXCEPTION: Enter a valid number\n");
+                    failed = 1;
+                    break;
+                }
+            }
+            if (failed == 1) continue;
+
+            errno = 0;
+            data[i] = (int)strtol(buffer, NULL, 0);
+
+            if (errno == ERANGE) fprintf(stderr, "Range error, try again\n");
+
+            else if (i > 0 && (data[i] > 100 || data[i] < 0)) {
+                printf("WRONG_INPUT_EXCEPTION: Enter a valid number\n");
+                data[i] = 0;
+            }
+
+            else if (i == 0) {
+                row* p = table->next;
+                failed = 0;
+
+                while (p != NULL) {
+                    if (p->data[0] == data[0]) {
+                        printf("Found duplicate Student ID (%d), try again\n", p->data[0]);
+                        failed = 1;
+                        break;
+                    }
+                    p = p->next;
+                }
+
+                if (failed == 0) break;
+            }
+
+            else break;
         }
-
-        while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
     }
     p->data = data;
     return;
