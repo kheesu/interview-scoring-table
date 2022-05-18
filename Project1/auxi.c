@@ -1,8 +1,9 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include "header.h"
+
 
 
 void get_average(head* table, int q) {
@@ -12,6 +13,7 @@ void get_average(head* table, int q) {
         for (int i = 1; i <= q; i++) {
             _sum += row->data[i];
         }
+
         int _mean = _sum / q;
         _sum = 0;
         row->data[q + 1] = _mean;
@@ -29,6 +31,7 @@ int check_floor_score(const row* using_row, int q, const int floor_score) {
 }
 
 void sort_array(int* array, int num) { //bubble sort 
+
     int temp;
     for (int i = 0; i < num; i++)
     {
@@ -42,7 +45,7 @@ void sort_array(int* array, int num) { //bubble sort
             }
         }
     }
-}
+
 
 int* make_average_array(head* table, int q, int people) {
     row* using_row = table->next;
@@ -70,6 +73,7 @@ int paint_pass(head* table, int q, int average, int floor_score) {
     return cnt;
 }
 
+
 void paint_fail(head* table, int q) {
     row* p = table->next;
     while (p != NULL) {
@@ -82,6 +86,7 @@ void paint_fail(head* table, int q) {
 
 void score_people(head* table, int q, int floor_score, int pass_people_num) {
     get_average(table, q);
+
     int people = how_many_people(table);
     int* average_array = make_average_array(table, q, people);
     int temp = average_array[0];
@@ -100,6 +105,7 @@ void score_people(head* table, int q, int floor_score, int pass_people_num) {
 }
 
 
+
 int is_in_array(int* Array, int Array_length, int source) {
     for (int i = 0; i < Array_length; i++) {
         if (Array[i] == source) {
@@ -108,6 +114,7 @@ int is_in_array(int* Array, int Array_length, int source) {
     }
     return 0;
 }
+
 
 int how_many_people(head* table) {
     row* row = table->next;
@@ -126,6 +133,7 @@ void iterator(head* headrow, int q) {
     while (p != NULL) {
         for (int i = 0; i < q + 3; i++) {
             printf("%-20d", p->data[i]);
+
         }
         printf("\n");
         p = p->next;
@@ -264,3 +272,4 @@ int is_valid_table(head* headrow, int q) {
     }
     return 1;
 }
+

@@ -96,9 +96,8 @@ void row_append(int q, head* pointer) {                             //Creates ne
         pointer->tail->next = new;
         pointer->tail = new;
     }
-
     
-    pointer->tail->data = data;
+a = data;
     pointer->tail->next = NULL;
     return;
 }
