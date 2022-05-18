@@ -3,7 +3,6 @@
 #include <string.h>
 #include <errno.h>
 #include "header.h"
-#define ERANGE 0
 
 int main() {
     char buffer[BUFF_SIZE];
@@ -60,7 +59,6 @@ int main() {
 
                 table = csv_in(buffer);
 
-
                 if (table != NULL) {
                     q = table->config[0] - 3;
                     break;
@@ -76,7 +74,6 @@ int main() {
     
     while (1) {
         printf("Enter\n 1 to print table\n 2 to add entry\n 3 to search\n 4 to update\n 5 to delete\n 6 to save current table as csv\n 7 to calculate average\n 8 to calculate passed applicants\n 0 to exit\n");
-
         if (scanf("%4095s", buffer) != 1) {
             fprintf(stderr, "INPUT ERROR\n");
             return -1;
@@ -85,7 +82,6 @@ int main() {
         while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
 
         if (buffer[0] < '0' || buffer[0] > '8' || buffer[1] != '\0')
-
             printf("Invalid input, try again\n");
 
         else if (buffer[0] == '1') {
@@ -107,7 +103,6 @@ int main() {
 
             while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
 /*
-
             row* p = table_search(table, column, query);
 
             if (p == NULL) printf("ERROR\nSearch failed or empty table\n");
@@ -131,7 +126,6 @@ int main() {
             while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
 
             if (m_row_update(table, q, column, query) == 0) printf("ERROR\nSearch failed or empty table\n");
-
         }
 
         else if (buffer[0] == '5') {
@@ -144,10 +138,9 @@ int main() {
             }
 
             while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
-          
+
             //row_del(table, column, query);
             m_row_del(table, column, query);
-
         }
 
         else if (buffer[0] == '6') {
@@ -170,7 +163,6 @@ int main() {
         else if (buffer[0] == '8') {
             exception_score_people(table, q);
         }
-
 
 
         else if (buffer[0] == '0') {

@@ -5,7 +5,6 @@
 #define BUFF_SIZE 4096
 #define ROWALLOC(X) row *X = calloc(1,sizeof(row))
 
-
 typedef struct row row;
 struct row {
     row* next;
@@ -34,7 +33,6 @@ int m_row_update(head* table, int q, int column, int query);
 void row_del(head* table, int q, int column, int query);
 
 int m_row_del(head* table, int column, int query);
-
 
 
 void csv_out(head* table, int q, char* name);
