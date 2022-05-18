@@ -21,11 +21,17 @@ head* table_init(int len);
 
 row* table_search(head* table, int column, int query);
 
+int m_table_search(head* table, int column, int query, int q);
+
 void row_append(int q, head* pointer);
 
 void print_row(row* r, int q);
 
+int m_row_update(head* table, int q, int column, int query);
+
 void row_del(head* table, int q, int column, int query);
+
+int m_row_del(head* table, int column, int query);
 
 
 void csv_out(head* table, int q, char* name);
