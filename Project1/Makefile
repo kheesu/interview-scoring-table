@@ -1,12 +1,12 @@
 CC = gcc
 CCFLAGS = -g
 
-TARGET = auxi.o crud.o csv.o
+TARGET = main.o auxi.o crud.o csv.o
 
 all: main
 
 main: $(TARGET)
-	$(CC) $(CCFLAGS) -o $@ $<
+	$(CC) $(CCFLAGS) -o $@ $^
 
 main.o: header.h
 
