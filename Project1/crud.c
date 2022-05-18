@@ -30,6 +30,7 @@ head* table_init(int len) {
 
 void row_append(int q, head* pointer) {                             //Creates new row and appends to the end of the table
     char c;
+    char buffer[BUFF_SIZE];
     ROWALLOC(new);                                                  //Allocates new row and appends it to the table
                                                                 //TODO: malloc execption handling
     if (pointer->next == NULL) {
@@ -44,14 +45,39 @@ void row_append(int q, head* pointer) {                             //Creates ne
     int* data = calloc(q + 3, sizeof(int));                      //Allocate an int array to be inserted into the allocated row
 
     for (int i = 0; i < q + 1; i++) {
-        printf("Enter data for %s : \n", pointer->data[i]);
-        ;
-        if (scanf("%11d", data + i) != 1) {
-            fprintf(stderr, "INPUT ERROR\n");
-            exit(-1);
-        }
 
-        while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+        while (1) {
+            int failed = 0;
+            printf("Enter data for %s : \n", pointer->data[i]);
+
+            if (scanf("%11s", buffer) != 1) {
+                fprintf(stderr, "INPUT ERROR\n");
+                exit(-1);
+            }
+
+            while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+
+            for (int j = 0; buffer[j] != '\0'; j++) {
+                if (buffer[j] < '0' || buffer[j] > '9') {
+                    printf("WRONG_INPUT_EXCEPTION: Enter a valid number\n");
+                    failed = 1;
+                    break;
+                }
+            }
+            if (failed == 1) continue;
+
+            errno = 0;
+            data[i] = (int)strtol(buffer, NULL, 0);
+
+            if (errno == ERANGE) fprintf(stderr, "Range error, try again\n");
+
+            else if (i > 0 && (data[i] > 100 || data[i] < 0)) {
+                printf("WRONG_INPUT_EXCEPTION: Enter a valid number\n");
+                data[i] = 0;
+            }
+            else break;
+        }
+        
     }
     pointer->tail->data = data;
     pointer->tail->next = NULL;

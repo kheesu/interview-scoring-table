@@ -1,5 +1,6 @@
 ﻿#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "header.h"
 
 
@@ -9,7 +10,7 @@ void get_average(head* table, int q) {
         int _sum = 0;
         for (int i = 1; i <= q; i++) {
             _sum += row->data[i];
-        };
+        }
         int _mean = _sum / q;
         _sum = 0;
         row->data[q + 1] = _mean;
@@ -64,7 +65,7 @@ int paint_pass(head* table, int q, int average, int floor_score) {
             cnt++;
         }
         p = p->next;
-    };
+    }
     return cnt;
 }
 
@@ -75,7 +76,7 @@ void paint_fail(head* table, int q) {
             p->data[q + 2] = 0;
         }
         p = p->next;
-    };
+    }
 }
 
 void score_people(head* table, int q, int floor_score, int pass_people_num) {
@@ -137,21 +138,48 @@ void exception_score_people(head* table, int q) {
     if (table->next == NULL) {
         printf("EMPTY_TABLE_EXCEPTION: Empty Table.\n");
         return;
-    };
-    int floor_score;
-    printf("Enter the floor score\n");
-
-    if (scanf("%3d", &floor_score) != 1) {
-        fprintf(stderr, "INPUT ERROR\n");
-        exit(-1);
     }
+    int floor_score;
+    char buffer[BUFF_SIZE];
 
-    while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+    while (1) {
+        int failed = 0;
+        printf("Enter the floor score\n");
+
+        if (scanf("%4s", buffer) != 1) {
+            fprintf(stderr, "INPUT ERROR\n");
+            exit(-1);
+        }
+
+        while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+
+        for (int j = 0; buffer[j] != '\0'; j++) {
+            if (buffer[j] < '0' || buffer[j] > '9') {
+                printf("WRONG_INPUT_EXCEPTION: Enter a valid number\n");
+                break;
+            }
+        }
+        if (failed == 1) continue;
+
+        errno = 0;
+        floor_score = (int)strtol(buffer, NULL, 0);
+
+        if (errno == ERANGE) fprintf(stderr, "Range error, try again\n");
+
+        else if (floor_score > 100 || floor_score < 0) {
+            printf("WRONG_INPUT_EXCEPTION: Enter a valid number\n");
+            floor_score = 0;
+        }
+        else break;
+    }
+    
+
+
 
     if (floor_score < 0 || floor_score>90) {
         printf("INVALID_FLOOR_NUMBER_EXCEPTION: Minimum Score Must Be Between 0 and 90.\n");
         return;
-    };
+    }
     int people = how_many_people(table);
     int pass_people_num;
     printf("Enter the pass people num\n");
@@ -166,7 +194,7 @@ void exception_score_people(head* table, int q) {
     if (pass_people_num > people || pass_people_num <= 0) {
         printf("INVALID_PASS_PEOPLE_EXCEPTION: The number of openings must be a positive integer and cannot be larger than the number of applicants(%d)\n", people);
         return;
-    };
+    }
     int isValid = is_valid_table(table, q);
     if (!isValid) {
         return;
@@ -178,10 +206,10 @@ void exception_get_average(head* table, int q) {
     if (table->next == NULL) {
         printf("EMPTY_TABLE_EXCEPTION: Table is empty\n");
         return;
-    };
+    }
     if (!is_valid_table(table, q)) {
         return;
-    };
+    }
     get_average(table, q);
 }
 
@@ -192,7 +220,7 @@ int is_valid_input(int num) {
     }
     else {
         return 1;
-    };
+    }
 }
 
 int is_valid_pk(head* headrow, int q, int pk) {
@@ -200,8 +228,8 @@ int is_valid_pk(head* headrow, int q, int pk) {
     while (using_row != NULL) {
         if (using_row->data[0] == pk) {
             return 0;
-        };
-    };
+        }
+    }
     return 1;
 }
 
@@ -209,8 +237,8 @@ int is_valid_row(row* row, int q) {
     for (int i = 0; i <= q; i++) {
         if (row->data[i] == NULL) {
             return 0;
-        };
-    };
+        }
+    }
     return 1;
 }
 
@@ -224,14 +252,14 @@ int is_valid_table(head* headrow, int q) {
             print_row(using_row, q);
             printf("Row has missing value\n");
             return 0;
-        }; 
+        }
         if (is_in_array(used_pk, cnt, using_row->data[0])) {
             printf("Found duplicate Student ID (%d)\n", using_row->data[0]);
             return 0;
-        }; 
+        }
         used_pk[cnt] = using_row->data[0];
         cnt++;
         using_row = using_row->next;
-    };
+    }
     return 1;
 }
