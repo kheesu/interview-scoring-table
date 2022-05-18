@@ -190,9 +190,9 @@ void replace_row(head *table, row *p, int q) {
 
             if (errno == ERANGE) fprintf(stderr, "Range error, try again\n");
 
-            else if (i > 0 && (data[i] > 100 || data[i] < 0)) {
+            else if (i > 0 && (temp > 100 || temp < 0)) {
                 printf("WRONG_INPUT_EXCEPTION: Enter a valid number\n");
-                data[i] = 0;
+                temp = 0;
             }
 
             else if (i == 0) {
@@ -214,7 +214,10 @@ void replace_row(head *table, row *p, int q) {
                 }
             }
 
-            else break;
+            else {
+                data[i] = temp;
+                break;
+            }
         }
     }
     p->data = data;
