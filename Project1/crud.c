@@ -221,13 +221,16 @@ void replace_row(head *table, row *p, int q) {
 int m_row_update(head* table, int q, int column, int query) {
     if (table->next == NULL) return 0;                            //Returns 0 if table is empty i.e. only has head row
     row* p = table->next;
+    int found = 0;
 
     while (p != NULL) {
         if (p->data[column] == query) {
             replace_row(table, p, q);
+            found = 1;
         }
         p = p->next;
     }
+    if (found == 0) return 0;
     return 1;
 }
 

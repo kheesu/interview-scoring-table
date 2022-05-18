@@ -125,7 +125,7 @@ int main() {
 
             while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
 
-            m_row_update(table, q, column, query);
+            if (m_row_update(table, q, column, query) == 0) printf("ERROR\nSearch failed or empty table\n");
         }
 
         else if (buffer[0] == '5') {

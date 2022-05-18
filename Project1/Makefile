@@ -3,7 +3,7 @@ CCFLAGS = -g
 
 TARGET = main.o auxi.o crud.o csv.o
 
-all: main
+all: main clean
 
 main: $(TARGET)
 	$(CC) $(CCFLAGS) -o $@ $^
