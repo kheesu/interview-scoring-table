@@ -236,7 +236,7 @@ int is_valid_pk(head* headrow, int q, int pk) {
 
 int is_valid_row(row* row, int q) {
     for (int i = 0; i <= q; i++) {
-        if (row->data[i] == NULL) {
+        if (row->data[i] == 0) {
             return 0;
         }
     }
