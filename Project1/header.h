@@ -1,4 +1,5 @@
-#pragma once
+#ifndef HEADER_DEFINED
+#define HEADER_DEFINED
 
 #define MAX_LENGTH 50
 #define BUFF_SIZE 4096
@@ -61,3 +62,5 @@ int is_in_array(int* Array, int Array_length, int source);
 int how_many_people(head* table);
 
 void iterator(head* headrow, int q);
+
+#endif
