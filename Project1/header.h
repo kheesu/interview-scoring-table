@@ -53,7 +53,7 @@ int paint_pass(head* table, int q, int average, int floor_Score);
 
 void paint_fail(head* table, int q);
 
-int check_floor_score(row* using_row, int q, int floor_score);
+int check_floor_score(const row* using_row, int q, const int floor_score);
 
 void score_people(head* table, int q, int floor_score, int pass_people_num);
 
@@ -62,5 +62,11 @@ int is_in_array(int* Array, int Array_length, int source);
 int how_many_people(head* table);
 
 void iterator(head* headrow, int q);
+
+void exception_score_people(head* table, int q);
+
+void exception_get_average(head* table, int q);
+
+int is_valid_table(head* headrow, int q);
 
 #endif
