@@ -128,8 +128,8 @@ int m_table_search(head* table, int column, int query, int q) {
     while (p != NULL) {
         if (p->data[column] == query) {
             print_row(p, q);
-            p = p->next;
         }
+        p = p->next;
     }
     return 1;
 }

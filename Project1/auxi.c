@@ -80,8 +80,17 @@ void paint_fail(head* table, int q) {
     }
 }
 
+void initilazie_table(head* table, int q) {
+    row* using_row = table->next;
+    while (using_row != NULL) {
+        using_row->data[q + 2] = 0;
+        using_row = using_row->next;
+    }
+}
+
 void score_people(head* table, int q, int floor_score, int pass_people_num) {
     get_average(table, q);
+    initilazie_table(table, q);
     int people = how_many_people(table);
     int* average_array = make_average_array(table, q, people);
     int temp = average_array[0];
@@ -157,6 +166,7 @@ void exception_score_people(head* table, int q) {
         for (int j = 0; buffer[j] != '\0'; j++) {
             if (buffer[j] < '0' || buffer[j] > '9') {
                 printf("WRONG_INPUT_EXCEPTION: Enter a valid number\n");
+                failed = 1;
                 break;
             }
         }
@@ -171,35 +181,54 @@ void exception_score_people(head* table, int q) {
             printf("WRONG_INPUT_EXCEPTION: Enter a valid number\n");
             floor_score = 0;
         }
+        else if (floor_score < 0 || floor_score>90) {
+            printf("INVALID_FLOOR_NUMBER_EXCEPTION: Minimum Score Must Be Between 0 and 90.\n");
+        }
+
         else break;
     }
     
-
-
-
-    if (floor_score < 0 || floor_score>90) {
-        printf("INVALID_FLOOR_NUMBER_EXCEPTION: Minimum Score Must Be Between 0 and 90.\n");
-        return;
-    }
     int people = how_many_people(table);
     int pass_people_num;
-    printf("Enter the pass people num\n");
-    ;
-    if (scanf("%5d", &pass_people_num) != 1) {
-        fprintf(stderr, "INPUT ERROR\n");
-        exit(-1);
-    }
 
-    while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+    while (1) {
+        int failed = 0;
+        printf("Enter the pass people num\n");
 
-    if (pass_people_num > people || pass_people_num <= 0) {
-        printf("INVALID_PASS_PEOPLE_EXCEPTION: The number of openings must be a positive integer and cannot be larger than the number of applicants(%d)\n", people);
-        return;
+        if (scanf("%11s", buffer) != 1) {
+            fprintf(stderr, "INPUT ERROR\n");
+            exit(-1);
+        }
+
+        while ((c = getchar()) != '\n' && c != EOF);                                 //Flush stdin
+
+        for (int j = 0; buffer[j] != '\0'; j++) {
+            if (buffer[j] < '0' || buffer[j] > '9') {
+                printf("WRONG_INPUT_EXCEPTION: Enter a valid number\n");
+                failed = 1;
+                break;
+            }
+        }
+        if (failed == 1) continue;
+
+        errno = 0;
+        pass_people_num = (int)strtol(buffer, NULL, 0);
+
+        if (errno == ERANGE) fprintf(stderr, "Range error, try again\n");
+
+        if (pass_people_num > people || pass_people_num <= 0) {
+            printf("INVALID_PASS_PEOPLE_EXCEPTION: The number of openings must be a positive integer and cannot be larger than the number of applicants(%d)\n", people);
+            failed = 1;
+        }
+
+        int isValid = is_valid_table(table, q);
+        if (!isValid) {
+            failed = 1;
+        }
+
+        if (failed == 0) break;
     }
-    int isValid = is_valid_table(table, q);
-    if (!isValid) {
-        return;
-    }
+    
     score_people(table, q, floor_score, pass_people_num);
 }
 
@@ -252,15 +281,18 @@ int is_valid_table(head* headrow, int q) {
         if (!is_valid_row(using_row, q)) {
             print_row(using_row, q);
             printf("Row has missing value\n");
+            free(used_pk);
             return 0;
         }
         if (is_in_array(used_pk, cnt, using_row->data[0])) {
             printf("Found duplicate Student ID (%d)\n", using_row->data[0]);
+            free(used_pk);
             return 0;
         }
         used_pk[cnt] = using_row->data[0];
         cnt++;
         using_row = using_row->next;
     }
+    free(used_pk);
     return 1;
 }
