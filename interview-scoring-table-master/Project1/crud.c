@@ -4,9 +4,9 @@
 #include <errno.h>
 #include "header.h"
 
-head* table_init(int len) {
+head* table_init(int len) { //테이블을 초기화한다.
 
-    char(*h)[MAX_LENGTH];
+    char(*h)[MAX_LENGTH]
     h = malloc(sizeof(*h) * (len + 3));
 
     strcpy(h[0], "Student ID");
