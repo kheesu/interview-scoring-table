@@ -4,12 +4,17 @@
 #include <errno.h>
 #include "header.h"
 
-head* table_init(int len) {
+head* table_init(int len) {                                         //Initializes a table by allocating a head structure
 
     char(*h)[MAX_LENGTH];
     h = malloc(sizeof(*h) * (len + 3));
 
-    strcpy(h[0], "Student ID");
+    if (h == NULL) {
+        fprintf(stderr, "Memory Allocation Error\nExiting...\n");
+        return -1;
+    }
+
+    strcpy(h[0], "Student ID");                                     //Inserts the headers into the head row
 
     for (int i = 1; i < len + 1; i++) {
         char buffer[1000];
@@ -22,6 +27,12 @@ head* table_init(int len) {
     strcpy(h[len + 2], "P/F");
 
     head* out = calloc(1,sizeof(head));
+
+    if (out == NULL) {
+        fprintf(stderr, "Memory Allocation Error\nExiting...\n");
+        return -1;
+    }
+
     out->data = h;
     out->next = NULL;
     out->tail = out->next;
@@ -72,7 +83,7 @@ void row_append(int q, head* pointer) {                             //Creates ne
 
                 while (p != NULL) {
                     if (p->data[0] == data[0]) {
-                        printf("Found duplicate Student ID (%d), try again\n", p->data[0]);
+                        printf("Found duplicate Student ID (%d), try again\n", p->data[0]);     //Makes user enter the student ID again if duplicate is found
                         failed = 1;
                         break;
                     }
@@ -87,6 +98,11 @@ void row_append(int q, head* pointer) {                             //Creates ne
     }
 
     ROWALLOC(new);                                                  //Allocates new row and appends it to the table
+
+    if (new == NULL) {
+        fprintf(stderr, "Memory Allocation Error\nExiting...\n");
+        return -1;
+    }
 
     if (pointer->next == NULL) {
         pointer->next = new;
@@ -121,8 +137,8 @@ row* table_search(head* table, int column, int query) {             //Returns po
     return NULL;                                                    //Also returns NULL if search failed
 }
 
-int m_table_search(head* table, int column, int query, int q) {
-    if (table->next == NULL) return 0;                            //Returns 0 if table is empty i.e. only has head row
+int m_table_search(head* table, int column, int query, int q) {     //Prints all rows with matching condition
+    if (table->next == NULL) return 0;                              //Returns 0 if table is empty i.e. only has head row
     row* p = table->next;
 
     while (p != NULL) {
@@ -134,7 +150,7 @@ int m_table_search(head* table, int column, int query, int q) {
     return 1;
 }
 
-void row_update(head* table, int q, int column, int query) {
+void row_update(head* table, int q, int column, int query) {        //Update function that updates first matching row, replaced with m_row_update
     row* p = table_search(table, column, query);
     char c;
 
@@ -224,8 +240,8 @@ void replace_row(head *table, row *p, int q) {
     return;
 }
 
-int m_row_update(head* table, int q, int column, int query) {
-    if (table->next == NULL) return 0;                            //Returns 0 if table is empty i.e. only has head row
+int m_row_update(head* table, int q, int column, int query) {       //Update function that works with all matching entries
+    if (table->next == NULL) return 0;                              //Returns 0 if table is empty i.e. only has head row
     row* p = table->next;
     int found = 0;
 
@@ -239,9 +255,6 @@ int m_row_update(head* table, int q, int column, int query) {
     if (found == 0) return 0;
     return 1;
 }
-
-//TODO: Make update function for updating single values
-//void update_value(head *table, int q, int column, int query)
 
 void row_del(head* table, int q, int column, int query) {               //Deletes first matching entry
     if (table->next == NULL) {                                            //Returns if table is empty i.e. only has head row
@@ -276,7 +289,7 @@ void row_del(head* table, int q, int column, int query) {               //Delete
     printf("Search failed, abort delete\n");
 }
 
-//TODO: Make delete function for deleting multiple matching rows
+
 int m_row_del(head* table, int column, int query) {
     int result = 0;
     if (table->next == NULL) {                                            //Returns if table is empty i.e. only has head row
